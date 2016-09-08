@@ -73,7 +73,7 @@ endfunction
 
 " Configure ------------------------------------------------------------------
 if !exists('g:marron#cache_dir')
-  let g:marron#cache_dir = '~/.cache/vim-marron'
+  let g:marron#cache_dir = '~/.cache/vim/marron'
 endif
 
 " Create a cache dir when missing
