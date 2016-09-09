@@ -1,0 +1,83 @@
+*marron.txt*			Reload vimrc with setglobal instead of set
+
+Version: 0.1.0
+Author:  Alisue <lambdalisue@hashnote.net>
+Support: Vim 7.4 and above
+License: MIT license
+
+
+=============================================================================
+CONTENTS					*vim-marron-contents*
+
+INTRODUCTION			|vim-marron-introduction|
+INTERFACE			|vim-marron-interface|
+  VARIABLE			|vim-marron-variable|
+  MAPPING			|vim-marron-mapping|
+  COMMAND			|vim-marron-command|
+
+
+==============================================================================
+INTRODUCTION				*vim-marron-introduction*
+
+*vim-marron* is a plugin to reload your |vimrc| with |:setglobal| instead of
+|set|.
+When a |vimrc| is reloaded, most of options were configured via |:set| command,
+indicating that reloading |vimrc| overwrite the local settings.
+marron use a cached |vimrc| which |:set| commands are substituted to
+|:setglobal| so that relading such |vimrc| won't overwrite current local
+options.
+
+
+==============================================================================
+USAGE					*vim-marron-usage*
+
+Add the followings to your |vimrc|.
+>
+	nmap <Leader><Leader>rr <Plug>(marron-reload-vimrc)
+	nmap <Leader><Leader>rg <Plug>(marron-reload-gvimrc)
+<
+Then hit <Leader><Leader>rr or <Leader><Leader>rg to reload.
+
+
+==============================================================================
+INTERFACE				*vim-marron-interface*
+
+------------------------------------------------------------------------------
+VARIABLE				*vim-marron-variable*
+
+					*g:marron#cache_dir*
+g:marron#cache_dir
+	A directory path which cache files of Vim script will be saved.
+	The directory will be created automatically when starting Vim.
+
+------------------------------------------------------------------------------
+MAPPING					*vim-marron-mapping*
+
+					*<Plug>(marron-reload-vimrc)*
+<Plug>(marron-reload-vimrc)
+	Exists only when one of user |vimrc| is found.
+	It reload a user |vimrc| by |:MarronSource|.
+
+					*<Plug>(marron-reload-gvimrc)*
+<Plug>(marron-reload-gvimrc)
+	Exists only when one of user |gvimrc| is found and has('gui_running')
+	returns truthy value.
+	It reload a user |gvimrc| by |:MarronSource|.
+
+------------------------------------------------------------------------------
+COMMAND					*vim-marron-command*
+
+:MarronSource			   			*:MarronSource*
+	Like |:source| command but use a modified cache of {file}.
+	If no corresponding cahce is found or the cache file is not fresh
+	enough, it automatically create a corresponding cache by:
+
+	1. Substitute all |:set| commands to :|setglobal|
+	2. Substitute all |:source| commands to |:MarronSource|
+
+	Note that it use |getftime()| internally to check if the cache is
+	fresh enough.
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
